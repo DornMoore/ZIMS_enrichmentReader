@@ -50,6 +50,14 @@ current_enclosure = df.iat[8, 1]
 # print("\n")
 # print(len(df.index))
 
+# Create DataFrame to store formatted data
+outData = []
+outColumns = ['individual', 'localId', 'preferredID', 'species', 'birth_loc', 'birth_type', 'birthAge', 'current_collection',
+              'current_enclosure', 'enrichmentType', 'eCategory', 'eGoal', 'eDate', 'dateGiven', 'timeGiven', 'reaction', 'rating', 'providedBy', 'details']
+
+# Structure
+birdInfo = individual, localID, preferredID, species, birth_loc, birth_type, birthAge, current_collection, current_enclosure,
+
 #Begin searching for Enrichment #
 row = 9  # start where we left off
 enrichment = ""
@@ -61,21 +69,33 @@ while row < len(df.index):
         eCategory = df.iat[row, 2]
         eGoal = df.iat[row, 3]
         eDate = df.iat[row, 4]
-        print(enrichment)
+        eInfo = enrichment, eCategory, eGoal, eDate
+        # print(birdInfo + eInfo)
 
         # move to the records for this enrichment
         row = row+3
         while pd.notnull(df.iat[row, 1]):
+            # convert date
             date = df.iat[row, 1]
+
             time = df.iat[row, 2]
+
+            # Handle nan values
             reaction = df.iat[row, 3]
             rating = df.iat[row, 4]
             providedBy = df.iat[row, 5]
             details = df.iat[row, 7]
 
-            print(str(date) + ", " + str(time) +
-                  ", " + str(reaction) + ", " + str(details))
+            actInfo = date, time, reaction, rating, providedBy, details
+            outData.append(birdInfo+eInfo+actInfo)
+
+            # print(str(date) + ", " + str(time) +
+            #       ", " + str(reaction) + ", " + str(details))
+
             row = row+1
         enrichment = ""
 
     row = row+1
+    outDF = pd.DataFrame(outData, columns=outColumns)
+    print(outDF.head())
+    outDF.to_excel('output.xlsx')
