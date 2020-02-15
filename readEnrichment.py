@@ -2,9 +2,9 @@
 
 """
 readEnrichment.py:
-Script reads through enrichment xls files produced by ZIMS. 
-This is a work around to the fact that we can export formatted xls files 
-from ZIMS but not CSV files that ould be useful in analysis. ZIMS is working 
+Script reads through enrichment xls files produced by ZIMS.
+This is a work around to the fact that we can export formatted xls files
+from ZIMS but not CSV files that ould be useful in analysis. ZIMS is working
 a way to ge tthe data we need outside of ZIMS but in the meantime.
 
 """
@@ -34,7 +34,7 @@ __status__ = "ALpha"
 dataPath = "data"
 
 outColumns = ['individual', 'localId', 'preferredID', 'species', 'birth_loc', 'birth_type', 'birthAge', 'current_collection',
-              'current_enclosure', 'enrichmentType', 'eCategory', 'eGoal', 'eDate', 'dateGiven', 'timeGiven', 'reaction', 'rating', 'providedBy', 'details']
+              'current_enclosure', 'enrichmentType', 'eCategory', 'eGoal', 'eDate', 'dateGiven', 'timeGiven', 'reaction', 'rating', 'providedBy', 'items', 'details']
 
 
 outData = []
@@ -92,7 +92,30 @@ for f in os.listdir(dataPath):
                     providedBy = df.iat[row, 5]
                     details = df.iat[row, 6]
 
-                    actInfo = date, time, reaction, rating, providedBy, details
+                    startKeyword = "Items:"
+                    endKeyword = 'Description/ placement:'
+                    index = 0
+                    startIndex = 0
+                    endIndex = 0
+                    items = []
+                    itemsFound = False
+
+                    # while indexFound != False:
+                    # for word in details.split():
+                    #     if word == startKeyword:
+                    #         startIndex = index
+                    #     if word == endKeyword:
+                    #         endIndex
+                    #     while itemsFound:
+                    #         items.append(word)
+                    #         print(word)
+
+                    if details.find(startKeyword) != -1:
+                        items = details[details.find(
+                            startKeyword)+len(startKeyword):details.find(endKeyword)]
+                        print(items)
+
+                    actInfo = date, time, reaction, rating, providedBy, items, details
 
                     # Add Row of Data to outData
                     outData.append(birdInfo+eInfo+actInfo)
