@@ -94,26 +94,18 @@ for f in os.listdir(dataPath):
 
                     startKeyword = "Items:"
                     endKeyword = 'Description/ placement:'
-                    index = 0
-                    startIndex = 0
-                    endIndex = 0
-                    items = []
-                    itemsFound = False
 
-                    # while indexFound != False:
-                    # for word in details.split():
-                    #     if word == startKeyword:
-                    #         startIndex = index
-                    #     if word == endKeyword:
-                    #         endIndex
-                    #     while itemsFound:
-                    #         items.append(word)
-                    #         print(word)
+                    items = ""
 
-                    if details.find(startKeyword) != -1:
+                    # move items tagged as ITEMS: to a separate field
+                    # ensure we have BOTH the startKeyword and the endKeyword
+                    if details.find(startKeyword) != -1 and details.find(endKeyword) != -1:
+                        # pull the string from details between the startKeyword and the ednKeyword
                         items = details[details.find(
                             startKeyword)+len(startKeyword):details.find(endKeyword)]
-                        print(items)
+                        # clean up items by getting rid of empty spaces and making it all lowercase
+                        items = items.strip().lower()
+                        # print(items)
 
                     actInfo = date, time, reaction, rating, providedBy, items, details
 
